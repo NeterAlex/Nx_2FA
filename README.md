@@ -1,4 +1,5 @@
-# Nx 2FA Chrome Extension
+# Nx 2FA - Browser Extension for TOTP 2FA
+> **注意**: 此扩展处理敏感的认证信息，请确保只从可信来源安装，并定期检查扩展权限。
 
 浏览器扩展程序，用于管理和生成 TOTP 2FA 验证码，支持 Edge 和 Chrome 等基于 Chromium 的浏览器。
 
@@ -15,14 +16,15 @@
 - **Material Design 3**: 使用 Google Material Design 3 风格设计 UI
 - **Manifest V3**: 符合最新 Chrome 扩展标准
 
+## 预览
+![overview.png](asset/overview.png)
+
 ## 安装方法
 1. 打开Chrome/Edge等基于Chromium的浏览器，访问 `chrome://extensions/`
 2. 在右上角启用"开发者模式"
 3. 点击"加载已解压的扩展程序"
 4. 选择包含此扩展文件的文件夹
 5. 扩展将出现在Chrome工具栏中
-
-
 
 ## otpauth:// URI 格式说明
 标准格式: `otpauth://totp/标签?参数`
@@ -34,4 +36,4 @@
 - `algorithm`: 哈希算法（默认SHA1）
 
 
-**注意**: 此扩展处理敏感的认证信息，请确保只从可信来源安装，并定期检查扩展权限。
+
