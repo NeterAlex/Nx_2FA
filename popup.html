@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOTP 2FA Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1 class="app-title">
+                <span class="material-icons">code</span>
+                Nx 2FA
+            </h1>
+            <div class="header-actions">
+                <button class="icon-button" id="menu-btn" title="菜单">
+                    <span class="material-icons">more_vert</span>
+                </button>
+                <button class="icon-button" id="add-account-btn" title="添加账户">
+                    <span class="material-icons">add</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menu Dropdown -->
+        <div class="menu-dropdown" id="menu-dropdown" style="display: none;">
+            <button class="menu-item" id="import-btn">
+                <span class="material-icons">upload</span>
+                导入账户
+            </button>
+            <button class="menu-item" id="export-btn">
+                <span class="material-icons">download</span>
+                导出账户
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container" id="search-container" style="display: none;">
+            <div class="search-bar">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" id="search-input" placeholder="搜索账户..." class="search-input">
+                <button class="icon-button search-clear" id="search-clear" title="清除搜索" style="display: none;">
+                    <span class="material-icons">clear</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state">
+            <div class="empty-state-icon">
+                <span class="material-icons">security</span>
+            </div>
+            <h2>还没有添加任何账户</h2>
+            <p>点击右上角的加号来添加你的第一个2FA账户</p>
+            <button class="primary-button" id="add-first-account">
+                <span class="material-icons">add</span>
+                添加账户
+            </button>
+        </div>
+
+        <!-- Accounts List -->
+        <div class="accounts-container" id="accounts-container" style="display: none;">
+            <div class="accounts-grid" id="accounts-list">
+                <!-- 动态生成的账户项 -->
+            </div>
+        </div>
+
+        <!-- Add Account Modal -->
+        <div class="modal-backdrop" id="add-modal-backdrop" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>添加新账户</h2>
+                    <button class="icon-button" id="close-modal-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-account-form">
+                        <div class="form-field">
+                            <label for="account-name">账户名称</label>
+                            <div class="input-container">
+                                <span class="material-icons input-icon">account_circle</span>
+                                <input type="text" id="account-name" placeholder="例如：Google" required>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="account-issuer">发行商（可选）</label>
+                            <div class="input-container">
+                                <span class="material-icons input-icon">business</span>
+                                <input type="text" id="account-issuer" placeholder="例如：Google">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="secret-key">密钥</label>
+                            <div class="input-container">
+                                <span class="material-icons input-icon">vpn_key</span>
+                                <input type="text" id="secret-key" placeholder="输入16位或32位密钥" required>
+                            </div>
+                            <div class="form-help">
+                                密钥通常在设置2FA时提供
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancel-add-btn">取消</button>
+                    <button type="submit" form="add-account-form" class="primary-button">添加账户</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Account Modal -->
+        <div class="modal-backdrop" id="edit-modal-backdrop" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>编辑账户</h2>
+                    <button class="icon-button" id="close-edit-modal-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-account-form">
+                        <div class="form-field">
+                            <label for="edit-account-name">账户名称</label>
+                            <div class="input-container">
+                                <span class="material-icons input-icon">account_circle</span>
+                                <input type="text" id="edit-account-name" required>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="edit-account-issuer">发行商（可选）</label>
+                            <div class="input-container">
+                                <span class="material-icons input-icon">business</span>
+                                <input type="text" id="edit-account-issuer">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="danger-button" id="delete-account-btn">删除账户</button>
+                    <div class="spacer"></div>
+                    <button type="button" class="secondary-button" id="cancel-edit-btn">取消</button>
+                    <button type="submit" form="edit-account-form" class="primary-button">保存更改</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div class="modal-backdrop" id="import-modal-backdrop" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>导入账户</h2>
+                    <button class="icon-button" id="close-import-modal-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="import-options">
+                        <div class="import-method">
+                            <h3>从文件导入</h3>
+                            <input type="file" id="import-file" accept=".txt,.json" style="display: none;">
+                            <button type="button" class="secondary-button" id="select-file-btn">
+                                <span class="material-icons">folder_open</span>
+                                选择文件
+                            </button>
+                            <div class="form-help">
+                                支持包含 otpauth:// URI 的文本文件或之前导出的JSON文件
+                            </div>
+                        </div>
+                        
+                        <div class="import-method">
+                            <h3>从文本导入</h3>
+                            <textarea id="import-text" rows="6" placeholder="粘贴 otpauth:// URI，每行一个：&#10;otpauth://totp/Example?secret=JBSWY3DPEHPK3PXP&issuer=Example" class="import-textarea"></textarea>
+                            <div class="form-help">
+                                每行一个 otpauth:// URI 格式的链接
+                            </div>
+                        </div>
+                    </div>
+                    <div id="import-preview" class="import-preview" style="display: none;">
+                        <h3>预览导入的账户</h3>
+                        <div id="import-preview-list"></div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancel-import-btn">取消</button>
+                    <button type="button" class="primary-button" id="confirm-import-btn" disabled>导入账户</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Modal -->
+        <div class="modal-backdrop" id="export-modal-backdrop" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>导出账户</h2>
+                    <button class="icon-button" id="close-export-modal-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="export-options">
+                        <div class="form-field">
+                            <label>导出格式</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="export-format" value="uri" checked>
+                                    <span>文本格式 (otpauth:// URI)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="export-format" value="json">
+                                    <span>JSON格式 (完整数据)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="export-preview">
+                            <h3>预览内容</h3>
+                            <textarea id="export-content" rows="10" readonly class="export-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="cancel-export-btn">取消</button>
+                    <button type="button" class="primary-button" id="download-export-btn">下载文件</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show QR Code Modal -->
+        <div class="modal-backdrop" id="show-qr-modal-backdrop" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>账户二维码</h2>
+                    <button class="icon-button" id="close-show-qr-modal-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="qr-code-display" id="qr-code-display">
+                        <!-- 二维码将显示在这里 -->
+                    </div>
+                    <div class="qr-code-info" id="qr-code-info">
+                        <!-- 账户信息将显示在这里 -->
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-button" id="close-show-qr-btn">关闭</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden file input for import -->
+        <input type="file" id="hidden-file-input" style="display: none;">
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <span class="toast-message" id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="lib/jsOTP.min.js"></script>
+    <script src="lib/qrcode.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

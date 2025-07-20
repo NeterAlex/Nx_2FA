@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#6750A4" stroke="#FFFFFF" stroke-width="4"/>
+  
+  <!-- Shield icon -->
+  <path d="M64 20L44 28C44 28 44 50 44 60C44 80 64 100 64 100C64 100 84 80 84 60C84 50 84 28 84 28L64 20Z" 
+        fill="#FFFFFF" stroke="#6750A4" stroke-width="2"/>
+  
+  <!-- Lock icon inside shield -->
+  <rect x="56" y="48" width="16" height="12" rx="2" fill="#6750A4"/>
+  <path d="M58 48V44C58 40.6863 60.6863 38 64 38C67.3137 38 70 40.6863 70 44V48" 
+        stroke="#6750A4" stroke-width="2" fill="none"/>
+  
+  <!-- Digital display lines -->
+  <rect x="50" y="68" width="28" height="3" rx="1.5" fill="#FFFFFF"/>
+  <rect x="50" y="74" width="20" height="3" rx="1.5" fill="#FFFFFF"/>
+  <rect x="50" y="80" width="24" height="3" rx="1.5" fill="#FFFFFF"/>
+</svg>

@@ -1,0 +1,34 @@
+{
+	"name": "nx-2fa-manager",
+	"version": "1.0.0",
+	"description": "A browser extension for managing TOTP 2FA codes with Material Design 3 UI (supports Edge & Chrome)",
+	"main": "popup.js",
+	"scripts": {
+		"build": "echo 'Building browser extension...' && echo 'Copy files to dist folder if needed'",
+		"dev": "echo 'Development mode - load unpacked extension in Edge/Chrome'",
+		"lint": "echo 'Run linting tools'",
+		"test": "echo 'Run tests'"
+	},
+	"keywords": [
+		"edge-extension",
+		"chrome-extension",
+		"browser-extension",
+		"2fa",
+		"totp",
+		"authentication",
+		"material-design",
+		"security"
+	],
+	"author": "Browser Extension Developer",
+	"license": "MIT",
+	"devDependencies": {},
+	"dependencies": {},
+	"browserslist": [
+		"Edge >= 88",
+		"Chrome >= 88"
+	],
+	"engines": {
+		"edge": ">=88.0.0",
+		"chrome": ">=88.0.0"
+	}
+}
