@@ -156,7 +156,10 @@ class TOTP2FAManager {
 		div.innerHTML = `
             <div class="account-header">
                 <div class="account-info">
-                    <div class="account-name">${this.escapeHtml(account.name)}</div>
+                    <div class="account-name">
+                        ${isDomainMatched ? '<span class="material-icons domain-icon" title="匹配当前网站">language</span>' : ""}
+                        <span class="account-name-text">${this.escapeHtml(account.name)}</span>
+                    </div>
                     ${account.issuer ? `<div class="account-issuer">${this.escapeHtml(account.issuer)}</div>` : ""}
                 </div>
                 <div class="account-actions">
@@ -165,7 +168,6 @@ class TOTP2FAManager {
                     </button>
                     <button class="icon-button edit-account-btn" title="编辑账户">
                         <span class="material-icons">edit</span>
-                        ${isDomainMatched ? '<div class="domain-badge"></div>' : ""}
                     </button>
                 </div>
             </div>
