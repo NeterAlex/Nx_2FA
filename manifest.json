@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Nx 2FA",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "管理和生成TOTP 2FA验证码的Chrome扩展程序",
 	"permissions": ["storage", "alarms", "activeTab"],
 	"action": {
