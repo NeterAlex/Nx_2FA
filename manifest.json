@@ -3,7 +3,7 @@
 	"name": "Nx 2FA",
 	"version": "1.0.0",
 	"description": "管理和生成TOTP 2FA验证码的Chrome扩展程序",
-	"permissions": ["storage"],
+	"permissions": ["storage", "alarms", "activeTab"],
 	"action": {
 		"default_popup": "popup.html",
 		"default_title": "Nx 2FA",
